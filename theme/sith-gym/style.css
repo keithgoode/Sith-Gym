@@ -1016,3 +1016,172 @@ body.sg-front-page .inside-article {
 		grid-template-columns: repeat(2, 1fr);
 	}
 }
+
+
+/* ==========================================================================
+   SINGLE ARTICLE (.single-post)
+   ==========================================================================
+   Targeted refinements for the standard post reading experience. These
+   styles are scoped to .single-post (a body class WordPress adds
+   automatically) so they never affect pages, archives, or the homepage.
+
+   We do NOT override GP's single.php template. GP's default rendering
+   flow (entry-header → post-image → entry-content → entry-footer) is
+   correct. These styles refine spacing, width, and visual hierarchy
+   within that existing structure.
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   19. Article — Reading Width
+   --------------------------------------------------------------------------
+   Constrains the article content to a comfortable reading column (50rem /
+   800px) centered within GP's wider container. This matches the prose
+   width used in the homepage positioning section.
+   -------------------------------------------------------------------------- */
+
+.single-post .inside-article {
+	max-width: 50rem;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: var(--sg-space-2xl);
+	padding-bottom: var(--sg-space-2xl);
+}
+
+
+/* --------------------------------------------------------------------------
+   20. Article — Entry Header
+   --------------------------------------------------------------------------
+   Title + meta. The title is slightly larger than the global h1 to give
+   the article a clear, editorial opening. The meta sits below with a
+   subtle separator to mark the transition into body content.
+   -------------------------------------------------------------------------- */
+
+.single-post .entry-header {
+	margin-bottom: var(--sg-space-xl);
+}
+
+.single-post .entry-title {
+	font-size: clamp(2rem, 5vw, 2.75rem);
+	font-weight: 800;
+	line-height: 1.15;
+	letter-spacing: -0.02em;
+	margin-bottom: var(--sg-space-md);
+}
+
+.single-post .entry-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--sg-space-sm) var(--sg-space-md);
+	color: var(--sg-text-secondary);
+	font-size: 0.85rem;
+	margin-bottom: 0;
+	padding-bottom: var(--sg-space-lg);
+	border-bottom: 1px solid var(--sg-border);
+}
+
+/* Separators between meta items — GP uses spans inside .entry-meta */
+.single-post .entry-header .entry-meta > span:not(:last-child)::after {
+	content: "·";
+	margin-left: var(--sg-space-md);
+	color: var(--sg-border);
+}
+
+.single-post .entry-meta a {
+	color: var(--sg-text-secondary);
+}
+
+.single-post .entry-meta a:hover {
+	color: var(--sg-accent);
+}
+
+
+/* --------------------------------------------------------------------------
+   21. Article — Featured Image
+   --------------------------------------------------------------------------
+   The featured image sits between the header and body content. It spans
+   the full reading width with a subtle border-radius for polish.
+   -------------------------------------------------------------------------- */
+
+.single-post .post-image {
+	margin-bottom: var(--sg-space-xl);
+}
+
+.single-post .post-image img {
+	width: 100%;
+	height: auto;
+	border-radius: 4px;
+	display: block;
+}
+
+
+/* --------------------------------------------------------------------------
+   22. Article — Body Content
+   --------------------------------------------------------------------------
+   The .entry-content div holds all post body HTML (paragraphs, headings,
+   lists, images, embeds, Gutenberg blocks). Base typography (sections 2–7)
+   already handles element-level styling. These rules add article-specific
+   spacing refinements within the reading column.
+   -------------------------------------------------------------------------- */
+
+.single-post .entry-content {
+	font-size: 1.05rem;
+	line-height: 1.8;
+}
+
+/* First element after content starts — remove excess top margin */
+.single-post .entry-content > *:first-child {
+	margin-top: 0;
+}
+
+/* Last element — remove bottom margin to avoid double-spacing before footer */
+.single-post .entry-content > *:last-child {
+	margin-bottom: 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   23. Article — Entry Footer
+   --------------------------------------------------------------------------
+   Tags and categories at the bottom of the article. Styled as a quiet
+   metadata line — not a visual feature. The top border marks the end
+   of the article body.
+   -------------------------------------------------------------------------- */
+
+.single-post footer.entry-meta {
+	margin-top: var(--sg-space-xl);
+	padding-top: var(--sg-space-lg);
+	padding-bottom: 0;
+	border-top: 1px solid var(--sg-border);
+	border-bottom: none;
+}
+
+.single-post footer.entry-meta .cat-links,
+.single-post footer.entry-meta .tags-links {
+	display: block;
+	margin-bottom: var(--sg-space-xs);
+}
+
+
+/* --------------------------------------------------------------------------
+   24. Article — Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+	.single-post .inside-article {
+		padding-top: var(--sg-space-xl);
+		padding-bottom: var(--sg-space-xl);
+	}
+
+	.single-post .entry-header {
+		margin-bottom: var(--sg-space-lg);
+	}
+
+	.single-post .post-image {
+		margin-bottom: var(--sg-space-lg);
+	}
+
+	.single-post .entry-content {
+		font-size: 1rem;
+	}
+}

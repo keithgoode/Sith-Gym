@@ -39,22 +39,23 @@ function sith_gym_editor_styles() {
 add_action( 'after_setup_theme', 'sith_gym_editor_styles' );
 
 /**
- * Force full-width layout on the front page.
+ * Force full-width (no sidebar) layout where appropriate.
  *
- * GeneratePress defaults to a content + sidebar layout on pages. The front
- * page template (front-page.php) uses its own full-width structure, so we
- * tell GP to remove the sidebar and use full-width content.
+ * GeneratePress defaults to a content + sidebar layout. We remove the
+ * sidebar on:
+ *   - Front page:   uses its own full-width template (front-page.php)
+ *   - Single posts:  articles use a focused, single-column reading layout
  *
- * This uses GP's `generate_sidebar_layout` filter, which controls the
- * layout on a per-page basis. Return 'no-sidebar' to disable the sidebar.
+ * Uses GP's `generate_sidebar_layout` filter, which controls the layout
+ * on a per-page basis. Return 'no-sidebar' to disable the sidebar.
  */
-function sith_gym_front_page_layout( $layout ) {
-	if ( is_front_page() ) {
+function sith_gym_sidebar_layout( $layout ) {
+	if ( is_front_page() || is_single() ) {
 		return 'no-sidebar';
 	}
 	return $layout;
 }
-add_filter( 'generate_sidebar_layout', 'sith_gym_front_page_layout' );
+add_filter( 'generate_sidebar_layout', 'sith_gym_sidebar_layout' );
 
 /**
  * Remove GP's default content wrapper on the front page.
