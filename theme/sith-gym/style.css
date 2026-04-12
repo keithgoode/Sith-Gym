@@ -13,4 +13,665 @@ License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain:  sith-gym
 */
 
-/* Child theme styles will go here. */
+/* ==========================================================================
+   Sith Gym — Base Styling
+   Dark identity system: colors, typography, spacing, component overrides.
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   1. Design Tokens
+   --------------------------------------------------------------------------
+   All brand values live here. Every rule below references these variables,
+   so changing the palette means editing one block — not hunting through
+   hundreds of lines.
+   -------------------------------------------------------------------------- */
+
+:root {
+	/* Backgrounds */
+	--sg-bg-primary:   #0B0B0C;
+	--sg-bg-secondary: #141416;
+
+	/* Text */
+	--sg-text-primary:   #E5E5E5;
+	--sg-text-secondary: #6B6B6E;
+
+	/* Accent */
+	--sg-accent:       #A11212;
+	--sg-accent-hover: #C41616;
+
+	/* Borders */
+	--sg-border: #222225;
+
+	/* Typography – system font stack */
+	--sg-font-body:    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+	                   Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	--sg-font-heading: var(--sg-font-body);
+
+	/* Spacing scale (8px base) */
+	--sg-space-xs:  0.25rem;  /*  4px */
+	--sg-space-sm:  0.5rem;   /*  8px */
+	--sg-space-md:  1rem;     /* 16px */
+	--sg-space-lg:  2rem;     /* 32px */
+	--sg-space-xl:  3rem;     /* 48px */
+	--sg-space-2xl: 4.5rem;   /* 72px */
+}
+
+
+/* --------------------------------------------------------------------------
+   2. Base Elements
+   -------------------------------------------------------------------------- */
+
+body {
+	background-color: var(--sg-bg-primary);
+	color: var(--sg-text-primary);
+	font-family: var(--sg-font-body);
+	line-height: 1.7;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+
+/* --------------------------------------------------------------------------
+   3. Typography
+   --------------------------------------------------------------------------
+   Heading scale uses a 1.25 ratio (Major Third) for balanced hierarchy.
+   Spacing above headings creates visual "section breaks" that give content
+   a deliberate rhythm without relying on explicit section containers.
+   -------------------------------------------------------------------------- */
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--sg-font-heading);
+	color: var(--sg-text-primary);
+	font-weight: 700;
+	line-height: 1.25;
+	letter-spacing: -0.01em;
+}
+
+h1 {
+	font-size: clamp(2rem, 4vw, 2.75rem);
+	margin-top: 0;
+	margin-bottom: var(--sg-space-lg);
+}
+
+h2 {
+	font-size: clamp(1.6rem, 3vw, 2.1rem);
+	margin-top: var(--sg-space-2xl);
+	margin-bottom: var(--sg-space-md);
+}
+
+h3 {
+	font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+	margin-top: var(--sg-space-xl);
+	margin-bottom: var(--sg-space-sm);
+}
+
+h4 {
+	font-size: 1.15rem;
+	margin-top: var(--sg-space-lg);
+	margin-bottom: var(--sg-space-sm);
+}
+
+h5 {
+	font-size: 1rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--sg-text-secondary);
+	margin-top: var(--sg-space-lg);
+	margin-bottom: var(--sg-space-xs);
+}
+
+h6 {
+	font-size: 0.875rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--sg-text-secondary);
+	margin-top: var(--sg-space-lg);
+	margin-bottom: var(--sg-space-xs);
+}
+
+p {
+	margin-top: 0;
+	margin-bottom: var(--sg-space-md);
+}
+
+/* Secondary / muted text utility */
+.text-muted,
+.entry-meta,
+.posted-on,
+.byline,
+.cat-links,
+.tags-links,
+.comments-link {
+	color: var(--sg-text-secondary);
+	font-size: 0.875rem;
+}
+
+blockquote {
+	border-left: 3px solid var(--sg-accent);
+	margin: var(--sg-space-lg) 0;
+	padding: var(--sg-space-md) var(--sg-space-lg);
+	background-color: var(--sg-bg-secondary);
+	color: var(--sg-text-primary);
+	font-style: italic;
+}
+
+blockquote p:last-child {
+	margin-bottom: 0;
+}
+
+hr {
+	border: none;
+	border-top: 1px solid var(--sg-border);
+	margin: var(--sg-space-xl) 0;
+}
+
+code,
+pre {
+	background-color: var(--sg-bg-secondary);
+	border: 1px solid var(--sg-border);
+	color: var(--sg-text-primary);
+	font-size: 0.875em;
+	border-radius: 3px;
+}
+
+code {
+	padding: 0.15em 0.4em;
+}
+
+pre {
+	padding: var(--sg-space-md);
+	overflow-x: auto;
+	line-height: 1.5;
+}
+
+pre code {
+	background: none;
+	border: none;
+	padding: 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   4. Links
+   --------------------------------------------------------------------------
+   Accent red is used for links — the primary "active" color in the UI.
+   Underlines only appear on hover to keep body text visually clean.
+   -------------------------------------------------------------------------- */
+
+a {
+	color: var(--sg-accent);
+	text-decoration: none;
+	transition: color 0.15s ease;
+}
+
+a:hover,
+a:focus {
+	color: var(--sg-accent-hover);
+	text-decoration: underline;
+}
+
+a:focus-visible {
+	outline: 2px solid var(--sg-accent);
+	outline-offset: 2px;
+}
+
+/* Headings that are links should inherit heading color, accent on hover */
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+	color: inherit;
+}
+
+h1 a:hover, h2 a:hover, h3 a:hover,
+h4 a:hover, h5 a:hover, h6 a:hover {
+	color: var(--sg-accent);
+	text-decoration: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   5. Lists
+   -------------------------------------------------------------------------- */
+
+ul, ol {
+	margin-top: 0;
+	margin-bottom: var(--sg-space-md);
+	padding-left: var(--sg-space-lg);
+}
+
+li {
+	margin-bottom: var(--sg-space-xs);
+}
+
+li::marker {
+	color: var(--sg-text-secondary);
+}
+
+
+/* --------------------------------------------------------------------------
+   6. Images & Media
+   -------------------------------------------------------------------------- */
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+figure {
+	margin: var(--sg-space-lg) 0;
+}
+
+figcaption {
+	color: var(--sg-text-secondary);
+	font-size: 0.85rem;
+	margin-top: var(--sg-space-sm);
+}
+
+
+/* --------------------------------------------------------------------------
+   7. Tables
+   -------------------------------------------------------------------------- */
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: var(--sg-space-lg);
+}
+
+th, td {
+	padding: var(--sg-space-sm) var(--sg-space-md);
+	text-align: left;
+	border-bottom: 1px solid var(--sg-border);
+}
+
+th {
+	font-weight: 600;
+	color: var(--sg-text-primary);
+	border-bottom-width: 2px;
+}
+
+td {
+	color: var(--sg-text-primary);
+}
+
+tr:hover td {
+	background-color: var(--sg-bg-secondary);
+}
+
+
+/* --------------------------------------------------------------------------
+   8. Buttons & Form Elements
+   --------------------------------------------------------------------------
+   Dark inputs with visible borders. The accent red is reserved for primary
+   action buttons — the one element where the brand color should dominate.
+   -------------------------------------------------------------------------- */
+
+button,
+input[type="submit"],
+input[type="button"],
+.button,
+.wp-block-button__link {
+	background-color: var(--sg-accent);
+	color: #fff;
+	border: none;
+	padding: 0.7em 1.6em;
+	font-size: 0.95rem;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	border-radius: 3px;
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.button:hover,
+.wp-block-button__link:hover {
+	background-color: var(--sg-accent-hover);
+	color: #fff;
+	text-decoration: none;
+}
+
+button:focus-visible,
+input[type="submit"]:focus-visible,
+input[type="button"]:focus-visible,
+.button:focus-visible,
+.wp-block-button__link:focus-visible {
+	outline: 2px solid var(--sg-accent);
+	outline-offset: 2px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select {
+	background-color: var(--sg-bg-secondary);
+	color: var(--sg-text-primary);
+	border: 1px solid var(--sg-border);
+	padding: 0.6em 0.8em;
+	font-size: 1rem;
+	font-family: var(--sg-font-body);
+	border-radius: 3px;
+	width: 100%;
+	transition: border-color 0.15s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+	border-color: var(--sg-accent);
+	outline: none;
+}
+
+::placeholder {
+	color: var(--sg-text-secondary);
+	opacity: 1;
+}
+
+
+/* --------------------------------------------------------------------------
+   9. GeneratePress Structure Overrides
+   --------------------------------------------------------------------------
+   GP outputs a predictable HTML structure. We override its component
+   defaults to match the dark identity while respecting its layout system.
+   -------------------------------------------------------------------------- */
+
+/* --- Header --- */
+.site-header {
+	background-color: var(--sg-bg-secondary);
+	border-bottom: 1px solid var(--sg-border);
+}
+
+.site-branding,
+.main-title a,
+.site-description {
+	color: var(--sg-text-primary);
+}
+
+.main-title a:hover {
+	color: var(--sg-accent);
+}
+
+.site-description {
+	color: var(--sg-text-secondary);
+}
+
+/* --- Navigation --- */
+.main-navigation,
+.main-navigation .main-nav ul li a,
+.menu-toggle {
+	color: var(--sg-text-primary);
+}
+
+.main-navigation {
+	background-color: var(--sg-bg-secondary);
+}
+
+.main-navigation .main-nav ul li a:hover,
+.main-navigation .main-nav ul li.current-menu-item a {
+	color: var(--sg-accent);
+}
+
+/* Dropdown sub-menus */
+.main-navigation ul ul {
+	background-color: var(--sg-bg-secondary);
+	border: 1px solid var(--sg-border);
+}
+
+.main-navigation ul ul li a {
+	color: var(--sg-text-primary);
+}
+
+.main-navigation ul ul li a:hover {
+	color: var(--sg-accent);
+	background-color: var(--sg-bg-primary);
+}
+
+/* --- Content Area --- */
+.site-content {
+	background-color: var(--sg-bg-primary);
+}
+
+.inside-article {
+	background-color: transparent;
+	padding-top: var(--sg-space-xl);
+	padding-bottom: var(--sg-space-xl);
+}
+
+.entry-title {
+	margin-bottom: var(--sg-space-md);
+}
+
+.entry-title a {
+	color: var(--sg-text-primary);
+}
+
+.entry-title a:hover {
+	color: var(--sg-accent);
+	text-decoration: none;
+}
+
+/* Post meta line */
+.entry-meta {
+	margin-bottom: var(--sg-space-lg);
+	padding-bottom: var(--sg-space-md);
+	border-bottom: 1px solid var(--sg-border);
+}
+
+/* Article separators on archive/blog pages */
+.post-image-aligned-center .inside-article + .inside-article,
+.blog .inside-article,
+.archive .inside-article,
+.search-results .inside-article {
+	border-bottom: 1px solid var(--sg-border);
+}
+
+/* --- Sidebar --- */
+.sidebar .inside-right-sidebar,
+.sidebar .inside-left-sidebar {
+	color: var(--sg-text-primary);
+}
+
+.sidebar .widget {
+	background-color: var(--sg-bg-secondary);
+	padding: var(--sg-space-lg);
+	border: 1px solid var(--sg-border);
+	border-radius: 3px;
+	margin-bottom: var(--sg-space-lg);
+}
+
+.sidebar .widget-title {
+	font-size: 0.85rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--sg-text-secondary);
+	margin-bottom: var(--sg-space-md);
+	padding-bottom: var(--sg-space-sm);
+	border-bottom: 1px solid var(--sg-border);
+}
+
+/* --- Footer --- */
+.site-footer {
+	background-color: var(--sg-bg-secondary);
+	border-top: 1px solid var(--sg-border);
+	color: var(--sg-text-secondary);
+	font-size: 0.875rem;
+}
+
+.site-footer a {
+	color: var(--sg-text-secondary);
+}
+
+.site-footer a:hover {
+	color: var(--sg-accent);
+}
+
+.site-info {
+	color: var(--sg-text-secondary);
+}
+
+/* --- Pagination --- */
+.nav-links a,
+.page-numbers {
+	color: var(--sg-text-secondary);
+	border: 1px solid var(--sg-border);
+	padding: 0.4em 0.8em;
+	border-radius: 3px;
+}
+
+.nav-links a:hover,
+a.page-numbers:hover {
+	color: var(--sg-accent);
+	border-color: var(--sg-accent);
+	text-decoration: none;
+}
+
+.nav-links .current,
+.page-numbers.current {
+	background-color: var(--sg-accent);
+	color: #fff;
+	border-color: var(--sg-accent);
+}
+
+/* --- Comments --- */
+.comment-body {
+	background-color: var(--sg-bg-secondary);
+	padding: var(--sg-space-lg);
+	border: 1px solid var(--sg-border);
+	border-radius: 3px;
+	margin-bottom: var(--sg-space-md);
+}
+
+.comment-meta,
+.comment-metadata {
+	color: var(--sg-text-secondary);
+	font-size: 0.85rem;
+}
+
+.comment-author .fn {
+	color: var(--sg-text-primary);
+	font-weight: 600;
+}
+
+.comment-reply-link {
+	font-size: 0.85rem;
+}
+
+
+/* --------------------------------------------------------------------------
+   10. WordPress Block Editor Overrides
+   --------------------------------------------------------------------------
+   Ensures Gutenberg blocks respect the dark palette when used in content.
+   -------------------------------------------------------------------------- */
+
+.wp-block-separator {
+	border-color: var(--sg-border);
+}
+
+.wp-block-quote {
+	border-left-color: var(--sg-accent);
+	background-color: var(--sg-bg-secondary);
+	padding: var(--sg-space-md) var(--sg-space-lg);
+}
+
+.wp-block-quote cite {
+	color: var(--sg-text-secondary);
+	font-size: 0.85rem;
+}
+
+.wp-block-code {
+	background-color: var(--sg-bg-secondary);
+	border: 1px solid var(--sg-border);
+	color: var(--sg-text-primary);
+}
+
+.wp-block-table table {
+	border-color: var(--sg-border);
+}
+
+.wp-block-group.has-background {
+	padding: var(--sg-space-lg);
+}
+
+.wp-block-pullquote {
+	border-top-color: var(--sg-accent);
+	border-bottom-color: var(--sg-accent);
+	color: var(--sg-text-primary);
+}
+
+.wp-block-pullquote cite {
+	color: var(--sg-text-secondary);
+}
+
+
+/* --------------------------------------------------------------------------
+   11. Selection & Scrollbar
+   -------------------------------------------------------------------------- */
+
+::selection {
+	background-color: var(--sg-accent);
+	color: #fff;
+}
+
+/* Scrollbar — Webkit browsers only. Degrades gracefully elsewhere. */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--sg-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--sg-border);
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--sg-text-secondary);
+}
+
+
+/* --------------------------------------------------------------------------
+   12. Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+	:root {
+		--sg-space-xl:  2rem;
+		--sg-space-2xl: 3rem;
+	}
+
+	body {
+		font-size: 0.95rem;
+	}
+
+	h2 {
+		margin-top: var(--sg-space-xl);
+	}
+
+	h3 {
+		margin-top: var(--sg-space-lg);
+	}
+
+	.inside-article {
+		padding-top: var(--sg-space-lg);
+		padding-bottom: var(--sg-space-lg);
+	}
+
+	.sidebar .widget {
+		padding: var(--sg-space-md);
+	}
+
+	blockquote {
+		padding: var(--sg-space-sm) var(--sg-space-md);
+		margin: var(--sg-space-md) 0;
+	}
+}

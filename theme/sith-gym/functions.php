@@ -24,3 +24,16 @@ function sith_gym_enqueue_styles() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'sith_gym_enqueue_styles' );
+
+/**
+ * Register editor styles.
+ *
+ * Loads the child theme stylesheet inside the block editor so that authors
+ * see dark backgrounds, brand typography, and accent colors while editing.
+ * WordPress automatically scopes the rules under .editor-styles-wrapper.
+ */
+function sith_gym_editor_styles() {
+	add_theme_support( 'editor-styles' );
+	add_editor_style( 'style.css' );
+}
+add_action( 'after_setup_theme', 'sith_gym_editor_styles' );
