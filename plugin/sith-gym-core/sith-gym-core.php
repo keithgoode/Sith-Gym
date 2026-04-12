@@ -3,7 +3,7 @@
  * Plugin Name: Sith Gym Core
  * Plugin URI:  https://github.com/keithgoode/Sith-Gym
  * Description: Core functionality plugin for the Sith Gym website. Houses all non-presentational features.
- * Version:     0.1.0
+ * Version:     0.1.1
  * Author:      Keith Goode
  * Author URI:  https://github.com/keithgoode
  * License:     GPL-2.0-or-later

@@ -5,7 +5,7 @@ Description:  Custom GeneratePress child theme for the Sith Gym website.
 Author:       Keith Goode
 Author URI:   https://github.com/keithgoode
 Template:     generatepress
-Version:      0.1.0
+Version:      0.1.1
 Requires at least: 6.0
 Requires PHP: 7.4
 License:      GNU General Public License v2 or later
@@ -387,12 +387,26 @@ select:focus {
 .site-header {
 	background-color: var(--sg-bg-secondary);
 	border-bottom: 1px solid var(--sg-border);
+	padding-top: 0.75rem;
+	padding-bottom: 0.75rem;
+}
+
+.site-branding {
+	max-width: 200px;
 }
 
 .site-branding,
 .main-title a,
 .site-description {
 	color: var(--sg-text-primary);
+}
+
+.site-logo img,
+.custom-logo,
+.header-image.is-logo-image {
+	max-width: 200px;
+	height: auto;
+	display: block;
 }
 
 .main-title a:hover {
