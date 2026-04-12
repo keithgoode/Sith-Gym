@@ -675,3 +675,344 @@ a.page-numbers:hover {
 		margin: var(--sg-space-md) 0;
 	}
 }
+
+
+/* ==========================================================================
+   HOMEPAGE (front-page.php)
+   ==========================================================================
+   Styles for the four homepage sections: hero, positioning, latest, CTA.
+   All classes prefixed .sg- to avoid collisions with GP or plugins.
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   13. Homepage — Shared Utilities
+   -------------------------------------------------------------------------- */
+
+.sg-container {
+	max-width: 70rem;         /* 1120px */
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: var(--sg-space-lg);
+	padding-right: var(--sg-space-lg);
+}
+
+.sg-front-page {
+	overflow: hidden;          /* Prevent horizontal bleed from full-width sections */
+}
+
+/* Remove GP's default content padding when using front-page.php */
+body.sg-front-page .site-content {
+	padding: 0;
+}
+
+body.sg-front-page .inside-article {
+	padding: 0;
+}
+
+.sg-section-title {
+	font-size: 0.8rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.12em;
+	color: var(--sg-text-secondary);
+	margin-top: 0;
+	margin-bottom: var(--sg-space-xl);
+}
+
+
+/* --------------------------------------------------------------------------
+   14. Homepage — Hero
+   --------------------------------------------------------------------------
+   Full-width section with optional background image. When an image is set
+   on the WP page, a dark overlay ensures text readability.
+   -------------------------------------------------------------------------- */
+
+.sg-hero {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 80vh;
+	padding: var(--sg-space-2xl) 0;
+	background-color: var(--sg-bg-primary);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	text-align: center;
+}
+
+/* Dark overlay when a background image is present */
+.sg-hero--has-image::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-color: rgba(11, 11, 12, 0.75);
+	z-index: 1;
+}
+
+.sg-hero__inner {
+	position: relative;
+	z-index: 2;
+}
+
+.sg-hero__title {
+	font-size: clamp(2.5rem, 6vw, 4.5rem);
+	font-weight: 800;
+	line-height: 1.1;
+	letter-spacing: -0.025em;
+	margin-bottom: var(--sg-space-lg);
+	color: var(--sg-text-primary);
+}
+
+.sg-hero__subtitle {
+	font-size: clamp(1.05rem, 2vw, 1.3rem);
+	line-height: 1.6;
+	color: var(--sg-text-secondary);
+	max-width: 38em;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: var(--sg-space-xl);
+}
+
+.sg-hero__cta {
+	display: inline-block;
+	padding: 0.85em 2.2em;
+	font-size: 0.9rem;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: #fff;
+	background-color: var(--sg-accent);
+	border: none;
+	border-radius: 3px;
+	text-decoration: none;
+	transition: background-color 0.15s ease;
+}
+
+.sg-hero__cta:hover {
+	background-color: var(--sg-accent-hover);
+	color: #fff;
+	text-decoration: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   15. Homepage — Brand Positioning
+   --------------------------------------------------------------------------
+   Renders the page body content (from the WP editor). Uses the secondary
+   background to create visual separation from the hero and latest sections.
+   The .entry-content wrapper ensures GP's default content typography applies.
+   -------------------------------------------------------------------------- */
+
+.sg-positioning {
+	background-color: var(--sg-bg-secondary);
+	border-top: 1px solid var(--sg-border);
+	border-bottom: 1px solid var(--sg-border);
+	padding: var(--sg-space-2xl) 0;
+}
+
+.sg-positioning__inner {
+	max-width: 50rem;         /* Narrower for readable prose */
+}
+
+.sg-positioning__content {
+	font-size: 1.05rem;
+	line-height: 1.8;
+}
+
+.sg-positioning__content > *:last-child {
+	margin-bottom: 0;
+}
+
+/* Center headings within the positioning section for impact */
+.sg-positioning__content h2,
+.sg-positioning__content h3 {
+	text-align: center;
+	margin-top: var(--sg-space-xl);
+}
+
+.sg-positioning__content h2:first-child,
+.sg-positioning__content h3:first-child {
+	margin-top: 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   16. Homepage — Latest Content
+   --------------------------------------------------------------------------
+   Three-column card grid for recent posts. Falls back to single column
+   on mobile. Cards use the secondary background for depth against the
+   primary background of the section.
+   -------------------------------------------------------------------------- */
+
+.sg-latest {
+	padding: var(--sg-space-2xl) 0;
+	background-color: var(--sg-bg-primary);
+}
+
+.sg-latest__grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: var(--sg-space-lg);
+}
+
+.sg-post-card {
+	background-color: var(--sg-bg-secondary);
+	border: 1px solid var(--sg-border);
+	border-radius: 4px;
+	overflow: hidden;
+	transition: border-color 0.15s ease;
+}
+
+.sg-post-card:hover {
+	border-color: var(--sg-accent);
+}
+
+.sg-post-card__image {
+	display: block;
+	line-height: 0;
+	overflow: hidden;
+}
+
+.sg-post-card__image img {
+	width: 100%;
+	height: 12rem;
+	object-fit: cover;
+	display: block;
+	transition: opacity 0.15s ease;
+}
+
+.sg-post-card:hover .sg-post-card__image img {
+	opacity: 0.85;
+}
+
+.sg-post-card__body {
+	padding: var(--sg-space-md) var(--sg-space-lg) var(--sg-space-lg);
+}
+
+.sg-post-card__date {
+	display: block;
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--sg-text-secondary);
+	margin-bottom: var(--sg-space-sm);
+}
+
+.sg-post-card__title {
+	font-size: 1.1rem;
+	font-weight: 700;
+	line-height: 1.3;
+	margin-top: 0;
+	margin-bottom: var(--sg-space-sm);
+}
+
+.sg-post-card__title a {
+	color: var(--sg-text-primary);
+	text-decoration: none;
+}
+
+.sg-post-card__title a:hover {
+	color: var(--sg-accent);
+}
+
+.sg-post-card__excerpt {
+	font-size: 0.875rem;
+	line-height: 1.6;
+	color: var(--sg-text-secondary);
+	margin: 0;
+}
+
+.sg-latest__more {
+	text-align: center;
+	margin-top: var(--sg-space-xl);
+}
+
+.sg-latest__more a {
+	font-size: 0.85rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--sg-text-secondary);
+	text-decoration: none;
+	transition: color 0.15s ease;
+}
+
+.sg-latest__more a:hover {
+	color: var(--sg-accent);
+}
+
+
+/* --------------------------------------------------------------------------
+   17. Homepage — Closing CTA
+   --------------------------------------------------------------------------
+   Minimal closing section. A single centered statement — no buttons, no
+   noise. The accent red bottom border is the only brand color, used as
+   a visual "period" at the end of the page.
+   -------------------------------------------------------------------------- */
+
+.sg-cta {
+	padding: var(--sg-space-2xl) 0;
+	text-align: center;
+	background-color: var(--sg-bg-secondary);
+	border-top: 1px solid var(--sg-border);
+}
+
+.sg-cta__text {
+	font-size: clamp(1.3rem, 3vw, 1.8rem);
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	color: var(--sg-text-primary);
+	margin: 0;
+}
+
+.sg-cta__text::after {
+	content: "";
+	display: block;
+	width: 3rem;
+	height: 2px;
+	background-color: var(--sg-accent);
+	margin: var(--sg-space-lg) auto 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   18. Homepage — Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+	.sg-hero {
+		min-height: 70vh;
+		padding: var(--sg-space-xl) 0;
+	}
+
+	.sg-hero__title {
+		margin-bottom: var(--sg-space-md);
+	}
+
+	.sg-hero__subtitle {
+		margin-bottom: var(--sg-space-lg);
+	}
+
+	.sg-latest__grid {
+		grid-template-columns: 1fr;
+		gap: var(--sg-space-md);
+	}
+
+	.sg-post-card__image img {
+		height: 10rem;
+	}
+
+	.sg-positioning,
+	.sg-latest,
+	.sg-cta {
+		padding: var(--sg-space-xl) 0;
+	}
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+	.sg-latest__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}

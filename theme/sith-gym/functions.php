@@ -37,3 +37,36 @@ function sith_gym_editor_styles() {
 	add_editor_style( 'style.css' );
 }
 add_action( 'after_setup_theme', 'sith_gym_editor_styles' );
+
+/**
+ * Force full-width layout on the front page.
+ *
+ * GeneratePress defaults to a content + sidebar layout on pages. The front
+ * page template (front-page.php) uses its own full-width structure, so we
+ * tell GP to remove the sidebar and use full-width content.
+ *
+ * This uses GP's `generate_sidebar_layout` filter, which controls the
+ * layout on a per-page basis. Return 'no-sidebar' to disable the sidebar.
+ */
+function sith_gym_front_page_layout( $layout ) {
+	if ( is_front_page() ) {
+		return 'no-sidebar';
+	}
+	return $layout;
+}
+add_filter( 'generate_sidebar_layout', 'sith_gym_front_page_layout' );
+
+/**
+ * Remove GP's default content wrapper on the front page.
+ *
+ * GP wraps page content in .inside-article with padding. Our front-page
+ * template handles its own structure, so we remove GP's content padding
+ * to prevent it from interfering with the full-width hero section.
+ */
+function sith_gym_front_page_content_classes( $classes ) {
+	if ( is_front_page() ) {
+		$classes[] = 'sg-front-page';
+	}
+	return $classes;
+}
+add_filter( 'body_class', 'sith_gym_front_page_content_classes' );
