@@ -1,0 +1,44 @@
+================================================================
+  plugin/sith-gym-core/sith-gym-core.php — VERSION BUMP
+================================================================
+
+Open plugin/sith-gym-core/sith-gym-core.php and make these two
+edits. Both should land on 0.1.2.
+
+----------------------------------------------------------------
+ 1. Version header (in the plugin's opening docblock)
+----------------------------------------------------------------
+
+FIND:
+    Version: 0.1.1
+
+REPLACE WITH:
+    Version: 0.1.2
+
+(Note: the header may use "Version: 0.1.1" or "Version:     0.1.1"
+with variable spacing. Match whatever format is already there and
+just change the number.)
+
+----------------------------------------------------------------
+ 2. SITH_GYM_CORE_VERSION constant
+----------------------------------------------------------------
+
+FIND:
+    define( 'SITH_GYM_CORE_VERSION', '0.1.0' );
+
+REPLACE WITH:
+    define( 'SITH_GYM_CORE_VERSION', '0.1.2' );
+
+(Again, match existing quote style — some code uses single quotes,
+some double. Only the version string itself needs to change.)
+
+----------------------------------------------------------------
+ Verification
+----------------------------------------------------------------
+
+After editing, run this from the repo root to confirm both
+changes landed:
+
+    grep -n "0.1.2" plugin/sith-gym-core/sith-gym-core.php
+
+You should see two matches.

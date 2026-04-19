@@ -1,0 +1,567 @@
+/* ==========================================================================
+   Sith Gym — Homepage Marketing Layer
+   sg-homepage.css
+
+   This file extends style.css with homepage-specific styles.
+   All classes prefixed .sg-hp- to avoid collision with GP, plugins,
+   and the base .sg- utility classes already defined in style.css.
+
+   Enqueue this file for the front page only via functions.php:
+
+     function sith_gym_enqueue_homepage_styles() {
+         if ( is_front_page() ) {
+             wp_enqueue_style(
+                 'sith-gym-homepage',
+                 get_stylesheet_directory_uri() . '/sg-homepage.css',
+                 array( 'sith-gym-style' ),
+                 wp_get_theme()->get( 'Version' )
+             );
+         }
+     }
+     add_action( 'wp_enqueue_scripts', 'sith_gym_enqueue_homepage_styles' );
+
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   0. Font Import
+   --------------------------------------------------------------------------
+   Bebas Neue: display/headline face — bold, geometric, all-caps authority.
+   Barlow Condensed kept as fallback only.
+   Body copy uses system sans-serif stack defined in style.css.
+   Font is loaded via wp_enqueue_style in functions.php (see sith_gym_enqueue_fonts).
+   -------------------------------------------------------------------------- */
+
+/* Note: Barlow Condensed removed — Bebas Neue is now the sole display face */
+
+
+/* --------------------------------------------------------------------------
+   0b. Homepage Design Token Extensions
+   --------------------------------------------------------------------------
+   Additional tokens scoped to the homepage only. They extend (never
+   override) the base tokens in :root defined in style.css.
+   -------------------------------------------------------------------------- */
+
+:root {
+	/* Homepage-specific */
+	--sg-hp-font-display: 'Bebas Neue', 'Barlow Condensed', var(--sg-font-heading);
+
+	/* Red accent variants for homepage drama */
+	--sg-hp-accent-dim:   rgba(161, 18, 18, 0.18);
+	--sg-hp-accent-glow:  rgba(161, 18, 18, 0.55);
+
+	/* Scan-line effect */
+	--sg-hp-scanline: repeating-linear-gradient(
+		0deg,
+		transparent,
+		transparent 3px,
+		rgba(255,255,255,0.012) 3px,
+		rgba(255,255,255,0.012) 4px
+	);
+
+	/* Section vertical rhythm */
+	--sg-hp-section-pad-y: clamp(4rem, 8vw, 8rem);
+}
+
+
+/* --------------------------------------------------------------------------
+   1. GeneratePress Reset — Front Page
+   --------------------------------------------------------------------------
+   Strip out GP's default inner padding and sidebar structures on the
+   front page so our full-width sections can own the viewport edge-to-edge.
+   -------------------------------------------------------------------------- */
+
+body.sg-front-page .site-content,
+body.sg-front-page .content-area,
+body.sg-front-page .inside-article,
+body.sg-front-page #primary {
+	padding: 0 !important;
+	margin: 0 !important;
+	max-width: none !important;
+}
+
+body.sg-front-page .site-main {
+	overflow: hidden;
+}
+
+
+/* --------------------------------------------------------------------------
+   2. Shared Utilities
+   -------------------------------------------------------------------------- */
+
+.sg-hp-container {
+	width: 100%;
+	max-width: 72rem;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: clamp(1.25rem, 4vw, 3rem);
+	padding-right: clamp(1.25rem, 4vw, 3rem);
+}
+
+.sg-hp-container--narrow {
+	max-width: 52rem;
+}
+
+
+/* --------------------------------------------------------------------------
+   3. SECTION 1 — Hero
+   -------------------------------------------------------------------------- */
+
+.sg-hp-hero {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100svh;
+	min-height: 100vh; /* fallback */
+	text-align: center;
+	background-color: var(--sg-bg-primary);
+	overflow: hidden;
+	padding: 6rem 1.25rem 5rem;
+}
+
+/* ── Watermark logo ── */
+.sg-hp-hero__watermark {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+	z-index: 0;
+}
+
+.sg-hp-hero__watermark img {
+	width: clamp(210px, 41.25vw, 480px);
+	height: clamp(210px, 41.25vw, 480px);
+	object-fit: contain;
+	opacity: 0.10;
+	mix-blend-mode: screen;
+}
+
+/* ── Scan-line texture ── */
+.sg-hp-hero__texture {
+	position: absolute;
+	inset: 0;
+	background: var(--sg-hp-scanline);
+	pointer-events: none;
+	z-index: 1;
+}
+
+/* ── Radial red underlighting ── */
+.sg-hp-hero::before {
+	content: '';
+	position: absolute;
+	bottom: -10%;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 80%;
+	height: 60%;
+	background: radial-gradient(
+		ellipse at center bottom,
+		var(--sg-hp-accent-glow) 0%,
+		transparent 70%
+	);
+	pointer-events: none;
+	z-index: 1;
+}
+
+/* ── Inner content ── */
+.sg-hp-hero__inner {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+}
+
+/* ── Headline ── */
+.sg-hp-hero__title {
+	font-family: var(--sg-hp-font-display);
+	font-size: clamp(2.625rem, 9vw, 7.125rem);
+	font-weight: 900;
+	line-height: 0.93;
+	letter-spacing: -0.01em;
+	text-transform: uppercase;
+	color: var(--sg-text-primary);
+	margin-top: 0;
+	margin-bottom: clamp(1rem, 3vw, 2rem);
+
+	/* Entrance animation */
+	animation: sg-hero-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Subtitle ── */
+.sg-hp-hero__subtitle {
+	font-family: var(--sg-font-body);
+	font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+	font-weight: 400;
+	text-transform: uppercase;
+	letter-spacing: 0.32em;
+	color: var(--sg-text-secondary);
+	margin: 0 auto;
+	max-width: 36em;
+
+	animation: sg-hero-rise 0.9s 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Bottom fade into next section ── */
+.sg-hp-hero__fade {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 10rem;
+	background: linear-gradient(to bottom, transparent, var(--sg-bg-primary));
+	pointer-events: none;
+	z-index: 3;
+}
+
+/* ── Animations ── */
+@keyframes sg-hero-rise {
+	from {
+		opacity: 0;
+		transform: translateY(2.5rem);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+
+/* --------------------------------------------------------------------------
+   4. SECTION 2 — The Sith Gym Code
+   -------------------------------------------------------------------------- */
+
+.sg-hp-code {
+	background-color: var(--sg-bg-primary);
+	padding: var(--sg-hp-section-pad-y) 0;
+}
+
+.sg-hp-code__heading {
+	font-family: var(--sg-hp-font-display);
+	font-size: clamp(0.875rem, 1.5vw, 1.0625rem);
+	font-weight: 400;
+	text-transform: uppercase;
+	letter-spacing: 0.5em;
+	color: var(--sg-accent);
+	text-align: center;
+	margin-top: 0;
+	margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+/* ── Tenet list ── */
+.sg-hp-code__list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.sg-hp-code__item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.875rem;
+	text-align: center;
+
+	/* Staggered entrance via CSS custom property */
+	animation: sg-tenet-in 0.6s calc(0.05s * var(--sg-item-index, 0) + 0.2s)
+	           cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Red tick / divider above each tenet */
+.sg-hp-code__tick {
+	display: block;
+	width: 1px;
+	height: 2rem;
+	background-color: var(--sg-accent);
+	transform-origin: top center;
+	transition: height 0.3s ease;
+}
+
+.sg-hp-code__item:hover .sg-hp-code__tick {
+	height: 3rem;
+}
+
+.sg-hp-code__text {
+	font-family: var(--sg-hp-font-display);
+	font-size: clamp(1.4rem, 3.5vw, 2.25rem);
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.01em;
+	line-height: 1.15;
+	color: var(--sg-text-primary);
+}
+
+@keyframes sg-tenet-in {
+	from {
+		opacity: 0;
+		transform: translateY(1.5rem);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+
+/* --------------------------------------------------------------------------
+   5. SECTION 3 — Brand Positioning
+   -------------------------------------------------------------------------- */
+
+.sg-hp-position {
+	background-color: var(--sg-bg-secondary);
+	border-top: 1px solid var(--sg-border);
+	border-bottom: 1px solid var(--sg-border);
+	padding: var(--sg-hp-section-pad-y) 0;
+}
+
+.sg-hp-position__grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: clamp(2rem, 6vw, 5rem);
+	align-items: center;
+}
+
+/* ── Image column ── */
+.sg-hp-position__media {
+	position: relative;
+	aspect-ratio: 1 / 1;
+	background-color: var(--sg-bg-primary);
+	overflow: hidden;
+}
+
+.sg-hp-position__img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	filter: grayscale(1);
+	opacity: 0.6;
+}
+
+.sg-hp-position__img-placeholder {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--sg-bg-secondary);
+	border: 1px dashed var(--sg-border);
+}
+
+.sg-hp-position__img-label {
+	font-family: var(--sg-hp-font-display);
+	font-size: 0.75rem;
+	letter-spacing: 0.2em;
+	color: var(--sg-text-secondary);
+	text-transform: uppercase;
+}
+
+/* Gradient overlay on image — bottom to section bg */
+.sg-hp-position__img-overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		to top,
+		var(--sg-bg-secondary) 0%,
+		transparent 40%
+	);
+	pointer-events: none;
+}
+
+/* ── Copy column ── */
+.sg-hp-position__heading {
+	font-family: var(--sg-hp-font-display);
+	font-size: clamp(2.5rem, 6vw, 5rem);
+	font-weight: 900;
+	text-transform: uppercase;
+	line-height: 0.95;
+	letter-spacing: -0.01em;
+	color: var(--sg-text-primary);
+	margin-top: 0;
+	margin-bottom: clamp(1.25rem, 3vw, 2rem);
+}
+
+.sg-hp-position__copy p {
+	font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+	line-height: 1.8;
+	color: var(--sg-text-secondary);
+	margin-bottom: var(--sg-space-md);
+}
+
+.sg-hp-position__copy p:last-child {
+	margin-bottom: 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   6. SECTION 4 — CTA
+   -------------------------------------------------------------------------- */
+
+.sg-hp-cta {
+	background-color: var(--sg-bg-primary);
+	padding: clamp(5rem, 12vw, 10rem) 0;
+	text-align: center;
+}
+
+.sg-hp-cta__heading {
+	font-family: var(--sg-hp-font-display);
+	font-size: clamp(2rem, 6vw, 4.5rem);
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: -0.01em;
+	color: var(--sg-text-primary);
+	margin-top: 0;
+	margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+.sg-hp-cta__btn {
+	display: inline-block;
+	font-family: var(--sg-hp-font-display);
+	font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+	font-weight: 800;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: #fff;
+	background-color: var(--sg-accent);
+	border: none;
+	padding: 1em 3em;
+	text-decoration: none;
+	transition:
+		background-color 0.15s ease,
+		transform 0.1s ease,
+		box-shadow 0.15s ease;
+	box-shadow: 0 0 0 0 var(--sg-hp-accent-glow);
+}
+
+.sg-hp-cta__btn:hover {
+	background-color: var(--sg-accent-hover);
+	color: #fff;
+	text-decoration: none;
+	transform: translateY(-2px);
+	box-shadow: 0 8px 32px var(--sg-hp-accent-glow);
+}
+
+.sg-hp-cta__btn:active {
+	transform: translateY(0);
+	box-shadow: none;
+}
+
+.sg-hp-cta__btn:focus-visible {
+	outline: 2px solid var(--sg-accent);
+	outline-offset: 3px;
+}
+
+
+/* --------------------------------------------------------------------------
+   7. Responsive — Tablet
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+	.sg-hp-position__grid {
+		grid-template-columns: 1fr;
+		gap: clamp(2rem, 5vw, 3rem);
+	}
+
+	.sg-hp-position__media {
+		aspect-ratio: 16 / 9;
+		max-height: 420px;
+	}
+}
+
+
+/* --------------------------------------------------------------------------
+   8. Responsive — Mobile
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+	.sg-hp-hero {
+		padding-top: 5rem;
+		padding-bottom: 4rem;
+	}
+
+	.sg-hp-hero__title {
+		/* Break long titles gracefully on small screens */
+		word-break: break-word;
+		hyphens: manual;
+	}
+
+	.sg-hp-code__text {
+		font-size: clamp(1.2rem, 7vw, 1.8rem);
+	}
+
+	.sg-hp-position__media {
+		aspect-ratio: 4 / 3;
+		max-height: 280px;
+	}
+
+	.sg-hp-cta__btn {
+		padding: 1em 2em;
+		width: 100%;
+		max-width: 320px;
+	}
+}
+
+
+/* --------------------------------------------------------------------------
+   9. Reduced Motion
+   --------------------------------------------------------------------------
+   Honour the user's OS-level preference. Strip animations but preserve
+   the end state so layout doesn't collapse.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+	.sg-hp-hero__title,
+	.sg-hp-hero__subtitle,
+	.sg-hp-code__item {
+		animation: none;
+	}
+
+	.sg-hp-code__tick {
+		transition: none;
+	}
+
+	.sg-hp-cta__btn {
+		transition: background-color 0.15s ease;
+	}
+}
+
+
+/* --------------------------------------------------------------------------
+   10. Nav Logo
+   --------------------------------------------------------------------------
+   Styles for the logo mark displayed next to the site name in the GP header.
+   Apply the .sg-nav-logo class via GP Customizer > Site Identity > Logo,
+   or target with GP's .site-branding context.
+   -------------------------------------------------------------------------- */
+
+.site-header .sg-nav-logo,
+.main-navigation .sg-nav-logo {
+	width: 32px;
+	height: 32px;
+	object-fit: contain;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 0.5rem;
+	flex-shrink: 0;
+}
+
+/* GP wraps logo in .site-logo — ensure it sits inline with site title */
+.site-header .site-branding {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.site-header .site-logo img,
+.site-header .custom-logo {
+	width: 32px !important;
+	height: 32px !important;
+	object-fit: contain;
+	border-radius: 0;
+	mix-blend-mode: screen;
+}

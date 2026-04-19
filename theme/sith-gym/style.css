@@ -5,7 +5,7 @@ Description:  Custom GeneratePress child theme for the Sith Gym website.
 Author:       Keith Goode
 Author URI:   https://github.com/keithgoode
 Template:     generatepress
-Version:      0.1.2
+Version:      0.2.0
 Requires at least: 6.0
 Requires PHP: 7.4
 License:      GNU General Public License v2 or later
@@ -20,11 +20,16 @@ Text Domain:  sith-gym
 
 
 /* --------------------------------------------------------------------------
-   1. Design Tokens
+   0. Font Import
    --------------------------------------------------------------------------
-   All brand values live here. Every rule below references these variables,
-   so changing the palette means editing one block — not hunting through
-   hundreds of lines.
+   Bebas Neue: headline/display face — bold, geometric, all-caps authority.
+   System sans-serif stack: body copy — maximum legibility, zero loading cost.
+   Font is loaded via wp_enqueue_style in functions.php (see sith_gym_enqueue_fonts).
+   -------------------------------------------------------------------------- */
+
+
+/* --------------------------------------------------------------------------
+   1. Design Tokens
    -------------------------------------------------------------------------- */
 
 :root {
@@ -43,18 +48,18 @@ Text Domain:  sith-gym
 	/* Borders */
 	--sg-border: #222225;
 
-	/* Typography – system font stack */
+	/* Typography */
 	--sg-font-body:    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-	                   Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-	--sg-font-heading: var(--sg-font-body);
+	                   Helvetica, Arial, sans-serif;
+	--sg-font-heading: 'Bebas Neue', -apple-system, BlinkMacSystemFont, sans-serif;
 
 	/* Spacing scale (8px base) */
-	--sg-space-xs:  0.25rem;  /*  4px */
-	--sg-space-sm:  0.5rem;   /*  8px */
-	--sg-space-md:  1rem;     /* 16px */
-	--sg-space-lg:  2rem;     /* 32px */
-	--sg-space-xl:  3rem;     /* 48px */
-	--sg-space-2xl: 4.5rem;   /* 72px */
+	--sg-space-xs:  0.25rem;
+	--sg-space-sm:  0.5rem;
+	--sg-space-md:  1rem;
+	--sg-space-lg:  2rem;
+	--sg-space-xl:  3rem;
+	--sg-space-2xl: 4.5rem;
 }
 
 
@@ -74,18 +79,14 @@ body {
 
 /* --------------------------------------------------------------------------
    3. Typography
-   --------------------------------------------------------------------------
-   Heading scale uses a 1.25 ratio (Major Third) for balanced hierarchy.
-   Spacing above headings creates visual "section breaks" that give content
-   a deliberate rhythm without relying on explicit section containers.
    -------------------------------------------------------------------------- */
 
 h1, h2, h3, h4, h5, h6 {
 	font-family: var(--sg-font-heading);
 	color: var(--sg-text-primary);
-	font-weight: 700;
-	line-height: 1.25;
-	letter-spacing: -0.01em;
+	font-weight: 400; /* Bebas Neue is single-weight — 400 is correct */
+	line-height: 1.15;
+	letter-spacing: 0.02em;
 }
 
 h1 {
@@ -114,9 +115,7 @@ h4 {
 
 h5 {
 	font-size: 1rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
+	letter-spacing: 0.08em;
 	color: var(--sg-text-secondary);
 	margin-top: var(--sg-space-lg);
 	margin-bottom: var(--sg-space-xs);
@@ -124,9 +123,7 @@ h5 {
 
 h6 {
 	font-size: 0.875rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
+	letter-spacing: 0.08em;
 	color: var(--sg-text-secondary);
 	margin-top: var(--sg-space-lg);
 	margin-bottom: var(--sg-space-xs);
@@ -135,9 +132,9 @@ h6 {
 p {
 	margin-top: 0;
 	margin-bottom: var(--sg-space-md);
+	font-family: var(--sg-font-body);
 }
 
-/* Secondary / muted text utility */
 .text-muted,
 .entry-meta,
 .posted-on,
@@ -147,6 +144,7 @@ p {
 .comments-link {
 	color: var(--sg-text-secondary);
 	font-size: 0.875rem;
+	font-family: var(--sg-font-body);
 }
 
 blockquote {
@@ -156,6 +154,7 @@ blockquote {
 	background-color: var(--sg-bg-secondary);
 	color: var(--sg-text-primary);
 	font-style: italic;
+	font-family: var(--sg-font-body);
 }
 
 blockquote p:last-child {
@@ -196,9 +195,6 @@ pre code {
 
 /* --------------------------------------------------------------------------
    4. Links
-   --------------------------------------------------------------------------
-   Accent red is used for links — the primary "active" color in the UI.
-   Underlines only appear on hover to keep body text visually clean.
    -------------------------------------------------------------------------- */
 
 a {
@@ -218,7 +214,6 @@ a:focus-visible {
 	outline-offset: 2px;
 }
 
-/* Headings that are links should inherit heading color, accent on hover */
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
 	color: inherit;
 }
@@ -238,6 +233,7 @@ ul, ol {
 	margin-top: 0;
 	margin-bottom: var(--sg-space-md);
 	padding-left: var(--sg-space-lg);
+	font-family: var(--sg-font-body);
 }
 
 li {
@@ -266,6 +262,7 @@ figcaption {
 	color: var(--sg-text-secondary);
 	font-size: 0.85rem;
 	margin-top: var(--sg-space-sm);
+	font-family: var(--sg-font-body);
 }
 
 
@@ -277,6 +274,7 @@ table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-bottom: var(--sg-space-lg);
+	font-family: var(--sg-font-body);
 }
 
 th, td {
@@ -302,9 +300,6 @@ tr:hover td {
 
 /* --------------------------------------------------------------------------
    8. Buttons & Form Elements
-   --------------------------------------------------------------------------
-   Dark inputs with visible borders. The accent red is reserved for primary
-   action buttons — the one element where the brand color should dominate.
    -------------------------------------------------------------------------- */
 
 button,
@@ -317,9 +312,11 @@ input[type="button"],
 	border: none;
 	padding: 0.7em 1.6em;
 	font-size: 0.95rem;
-	font-weight: 600;
-	letter-spacing: 0.02em;
-	border-radius: 3px;
+	font-family: var(--sg-font-heading);
+	font-weight: 400;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	border-radius: 0;
 	cursor: pointer;
 	transition: background-color 0.15s ease;
 }
@@ -358,7 +355,7 @@ select {
 	padding: 0.6em 0.8em;
 	font-size: 1rem;
 	font-family: var(--sg-font-body);
-	border-radius: 3px;
+	border-radius: 0;
 	width: 100%;
 	transition: border-color 0.15s ease;
 }
@@ -378,9 +375,6 @@ select:focus {
 
 /* --------------------------------------------------------------------------
    9. GeneratePress Structure Overrides
-   --------------------------------------------------------------------------
-   GP outputs a predictable HTML structure. We override its component
-   defaults to match the dark identity while respecting its layout system.
    -------------------------------------------------------------------------- */
 
 /* --- Header --- */
@@ -409,12 +403,18 @@ select:focus {
 	display: block;
 }
 
+.main-title a {
+	font-family: var(--sg-font-heading);
+	letter-spacing: 0.04em;
+}
+
 .main-title a:hover {
 	color: var(--sg-accent);
 }
 
 .site-description {
 	color: var(--sg-text-secondary);
+	font-family: var(--sg-font-body);
 }
 
 /* --- Navigation --- */
@@ -428,12 +428,17 @@ select:focus {
 	background-color: var(--sg-bg-secondary);
 }
 
+.main-navigation .main-nav ul li a {
+	font-family: var(--sg-font-heading);
+	letter-spacing: 0.08em;
+	font-size: 1rem;
+}
+
 .main-navigation .main-nav ul li a:hover,
 .main-navigation .main-nav ul li.current-menu-item a {
 	color: var(--sg-accent);
 }
 
-/* Dropdown sub-menus */
 .main-navigation ul ul {
 	background-color: var(--sg-bg-secondary);
 	border: 1px solid var(--sg-border);
@@ -461,6 +466,7 @@ select:focus {
 
 .entry-title {
 	margin-bottom: var(--sg-space-md);
+	font-family: var(--sg-font-heading);
 }
 
 .entry-title a {
@@ -472,15 +478,13 @@ select:focus {
 	text-decoration: none;
 }
 
-/* Post meta line */
 .entry-meta {
 	margin-bottom: var(--sg-space-lg);
 	padding-bottom: var(--sg-space-md);
 	border-bottom: 1px solid var(--sg-border);
+	font-family: var(--sg-font-body);
 }
 
-/* Article separators on archive/blog pages */
-.post-image-aligned-center .inside-article + .inside-article,
 .blog .inside-article,
 .archive .inside-article,
 .search-results .inside-article {
@@ -497,14 +501,13 @@ select:focus {
 	background-color: var(--sg-bg-secondary);
 	padding: var(--sg-space-lg);
 	border: 1px solid var(--sg-border);
-	border-radius: 3px;
 	margin-bottom: var(--sg-space-lg);
 }
 
 .sidebar .widget-title {
-	font-size: 0.85rem;
-	text-transform: uppercase;
-	letter-spacing: 0.08em;
+	font-family: var(--sg-font-heading);
+	font-size: 1rem;
+	letter-spacing: 0.1em;
 	color: var(--sg-text-secondary);
 	margin-bottom: var(--sg-space-md);
 	padding-bottom: var(--sg-space-sm);
@@ -517,6 +520,7 @@ select:focus {
 	border-top: 1px solid var(--sg-border);
 	color: var(--sg-text-secondary);
 	font-size: 0.875rem;
+	font-family: var(--sg-font-body);
 }
 
 .site-footer a {
@@ -529,6 +533,7 @@ select:focus {
 
 .site-info {
 	color: var(--sg-text-secondary);
+	font-family: var(--sg-font-body);
 }
 
 /* --- Pagination --- */
@@ -537,7 +542,6 @@ select:focus {
 	color: var(--sg-text-secondary);
 	border: 1px solid var(--sg-border);
 	padding: 0.4em 0.8em;
-	border-radius: 3px;
 }
 
 .nav-links a:hover,
@@ -559,7 +563,6 @@ a.page-numbers:hover {
 	background-color: var(--sg-bg-secondary);
 	padding: var(--sg-space-lg);
 	border: 1px solid var(--sg-border);
-	border-radius: 3px;
 	margin-bottom: var(--sg-space-md);
 }
 
@@ -567,22 +570,18 @@ a.page-numbers:hover {
 .comment-metadata {
 	color: var(--sg-text-secondary);
 	font-size: 0.85rem;
+	font-family: var(--sg-font-body);
 }
 
 .comment-author .fn {
 	color: var(--sg-text-primary);
 	font-weight: 600;
-}
-
-.comment-reply-link {
-	font-size: 0.85rem;
+	font-family: var(--sg-font-body);
 }
 
 
 /* --------------------------------------------------------------------------
    10. WordPress Block Editor Overrides
-   --------------------------------------------------------------------------
-   Ensures Gutenberg blocks respect the dark palette when used in content.
    -------------------------------------------------------------------------- */
 
 .wp-block-separator {
@@ -598,6 +597,7 @@ a.page-numbers:hover {
 .wp-block-quote cite {
 	color: var(--sg-text-secondary);
 	font-size: 0.85rem;
+	font-family: var(--sg-font-body);
 }
 
 .wp-block-code {
@@ -622,6 +622,7 @@ a.page-numbers:hover {
 
 .wp-block-pullquote cite {
 	color: var(--sg-text-secondary);
+	font-family: var(--sg-font-body);
 }
 
 
@@ -634,7 +635,6 @@ a.page-numbers:hover {
 	color: #fff;
 }
 
-/* Scrollbar — Webkit browsers only. Degrades gracefully elsewhere. */
 ::-webkit-scrollbar {
 	width: 8px;
 }
@@ -693,9 +693,6 @@ a.page-numbers:hover {
 
 /* ==========================================================================
    HOMEPAGE (front-page.php)
-   ==========================================================================
-   Styles for the four homepage sections: hero, positioning, latest, CTA.
-   All classes prefixed .sg- to avoid collisions with GP or plugins.
    ========================================================================== */
 
 
@@ -704,7 +701,7 @@ a.page-numbers:hover {
    -------------------------------------------------------------------------- */
 
 .sg-container {
-	max-width: 70rem;         /* 1120px */
+	max-width: 70rem;
 	margin-left: auto;
 	margin-right: auto;
 	padding-left: var(--sg-space-lg);
@@ -712,10 +709,9 @@ a.page-numbers:hover {
 }
 
 .sg-front-page {
-	overflow: hidden;          /* Prevent horizontal bleed from full-width sections */
+	overflow: hidden;
 }
 
-/* Remove GP's default content padding when using front-page.php */
 body.sg-front-page .site-content {
 	padding: 0;
 }
@@ -725,10 +721,10 @@ body.sg-front-page .inside-article {
 }
 
 .sg-section-title {
-	font-size: 0.8rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.12em;
+	font-family: var(--sg-font-heading);
+	font-size: 0.9rem;
+	font-weight: 400;
+	letter-spacing: 0.15em;
 	color: var(--sg-text-secondary);
 	margin-top: 0;
 	margin-bottom: var(--sg-space-xl);
@@ -737,9 +733,6 @@ body.sg-front-page .inside-article {
 
 /* --------------------------------------------------------------------------
    14. Homepage — Hero
-   --------------------------------------------------------------------------
-   Full-width section with optional background image. When an image is set
-   on the WP page, a dark overlay ensures text readability.
    -------------------------------------------------------------------------- */
 
 .sg-hero {
@@ -756,7 +749,6 @@ body.sg-front-page .inside-article {
 	text-align: center;
 }
 
-/* Dark overlay when a background image is present */
 .sg-hero--has-image::before {
 	content: "";
 	position: absolute;
@@ -771,15 +763,17 @@ body.sg-front-page .inside-article {
 }
 
 .sg-hero__title {
+	font-family: var(--sg-font-heading);
 	font-size: clamp(2.5rem, 6vw, 4.5rem);
-	font-weight: 800;
-	line-height: 1.1;
-	letter-spacing: -0.025em;
+	font-weight: 400;
+	line-height: 1.05;
+	letter-spacing: 0.02em;
 	margin-bottom: var(--sg-space-lg);
 	color: var(--sg-text-primary);
 }
 
 .sg-hero__subtitle {
+	font-family: var(--sg-font-body);
 	font-size: clamp(1.05rem, 2vw, 1.3rem);
 	line-height: 1.6;
 	color: var(--sg-text-secondary);
@@ -792,14 +786,14 @@ body.sg-front-page .inside-article {
 .sg-hero__cta {
 	display: inline-block;
 	padding: 0.85em 2.2em;
-	font-size: 0.9rem;
-	font-weight: 600;
-	letter-spacing: 0.06em;
+	font-family: var(--sg-font-heading);
+	font-size: 1.1rem;
+	font-weight: 400;
+	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	color: #fff;
 	background-color: var(--sg-accent);
 	border: none;
-	border-radius: 3px;
 	text-decoration: none;
 	transition: background-color 0.15s ease;
 }
@@ -813,10 +807,6 @@ body.sg-front-page .inside-article {
 
 /* --------------------------------------------------------------------------
    15. Homepage — Brand Positioning
-   --------------------------------------------------------------------------
-   Renders the page body content (from the WP editor). Uses the secondary
-   background to create visual separation from the hero and latest sections.
-   The .entry-content wrapper ensures GP's default content typography applies.
    -------------------------------------------------------------------------- */
 
 .sg-positioning {
@@ -827,10 +817,11 @@ body.sg-front-page .inside-article {
 }
 
 .sg-positioning__inner {
-	max-width: 50rem;         /* Narrower for readable prose */
+	max-width: 50rem;
 }
 
 .sg-positioning__content {
+	font-family: var(--sg-font-body);
 	font-size: 1.05rem;
 	line-height: 1.8;
 }
@@ -839,7 +830,6 @@ body.sg-front-page .inside-article {
 	margin-bottom: 0;
 }
 
-/* Center headings within the positioning section for impact */
 .sg-positioning__content h2,
 .sg-positioning__content h3 {
 	text-align: center;
@@ -854,10 +844,6 @@ body.sg-front-page .inside-article {
 
 /* --------------------------------------------------------------------------
    16. Homepage — Latest Content
-   --------------------------------------------------------------------------
-   Three-column card grid for recent posts. Falls back to single column
-   on mobile. Cards use the secondary background for depth against the
-   primary background of the section.
    -------------------------------------------------------------------------- */
 
 .sg-latest {
@@ -874,7 +860,6 @@ body.sg-front-page .inside-article {
 .sg-post-card {
 	background-color: var(--sg-bg-secondary);
 	border: 1px solid var(--sg-border);
-	border-radius: 4px;
 	overflow: hidden;
 	transition: border-color 0.15s ease;
 }
@@ -907,6 +892,7 @@ body.sg-front-page .inside-article {
 
 .sg-post-card__date {
 	display: block;
+	font-family: var(--sg-font-body);
 	font-size: 0.75rem;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
@@ -915,9 +901,11 @@ body.sg-front-page .inside-article {
 }
 
 .sg-post-card__title {
-	font-size: 1.1rem;
-	font-weight: 700;
-	line-height: 1.3;
+	font-family: var(--sg-font-heading);
+	font-size: 1.3rem;
+	font-weight: 400;
+	letter-spacing: 0.02em;
+	line-height: 1.2;
 	margin-top: 0;
 	margin-bottom: var(--sg-space-sm);
 }
@@ -932,6 +920,7 @@ body.sg-front-page .inside-article {
 }
 
 .sg-post-card__excerpt {
+	font-family: var(--sg-font-body);
 	font-size: 0.875rem;
 	line-height: 1.6;
 	color: var(--sg-text-secondary);
@@ -944,6 +933,7 @@ body.sg-front-page .inside-article {
 }
 
 .sg-latest__more a {
+	font-family: var(--sg-font-body);
 	font-size: 0.85rem;
 	font-weight: 600;
 	letter-spacing: 0.04em;
@@ -960,10 +950,6 @@ body.sg-front-page .inside-article {
 
 /* --------------------------------------------------------------------------
    17. Homepage — Closing CTA
-   --------------------------------------------------------------------------
-   Minimal closing section. A single centered statement — no buttons, no
-   noise. The accent red bottom border is the only brand color, used as
-   a visual "period" at the end of the page.
    -------------------------------------------------------------------------- */
 
 .sg-cta {
@@ -974,9 +960,10 @@ body.sg-front-page .inside-article {
 }
 
 .sg-cta__text {
-	font-size: clamp(1.3rem, 3vw, 1.8rem);
-	font-weight: 700;
-	letter-spacing: -0.01em;
+	font-family: var(--sg-font-heading);
+	font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+	font-weight: 400;
+	letter-spacing: 0.04em;
 	color: var(--sg-text-primary);
 	margin: 0;
 }
@@ -999,14 +986,6 @@ body.sg-front-page .inside-article {
 	.sg-hero {
 		min-height: 70vh;
 		padding: var(--sg-space-xl) 0;
-	}
-
-	.sg-hero__title {
-		margin-bottom: var(--sg-space-md);
-	}
-
-	.sg-hero__subtitle {
-		margin-bottom: var(--sg-space-lg);
 	}
 
 	.sg-latest__grid {
@@ -1034,24 +1013,11 @@ body.sg-front-page .inside-article {
 
 /* ==========================================================================
    SINGLE ARTICLE (.single-post)
-   ==========================================================================
-   Targeted refinements for the standard post reading experience. These
-   styles are scoped to .single-post (a body class WordPress adds
-   automatically) so they never affect pages, archives, or the homepage.
-
-   We do NOT override GP's single.php template. GP's default rendering
-   flow (entry-header → post-image → entry-content → entry-footer) is
-   correct. These styles refine spacing, width, and visual hierarchy
-   within that existing structure.
    ========================================================================== */
 
 
 /* --------------------------------------------------------------------------
    19. Article — Reading Width
-   --------------------------------------------------------------------------
-   Constrains the article content to a comfortable reading column (50rem /
-   800px) centered within GP's wider container. This matches the prose
-   width used in the homepage positioning section.
    -------------------------------------------------------------------------- */
 
 .single-post .inside-article {
@@ -1065,10 +1031,6 @@ body.sg-front-page .inside-article {
 
 /* --------------------------------------------------------------------------
    20. Article — Entry Header
-   --------------------------------------------------------------------------
-   Title + meta. The title is slightly larger than the global h1 to give
-   the article a clear, editorial opening. The meta sits below with a
-   subtle separator to mark the transition into body content.
    -------------------------------------------------------------------------- */
 
 .single-post .entry-header {
@@ -1076,10 +1038,11 @@ body.sg-front-page .inside-article {
 }
 
 .single-post .entry-title {
-	font-size: clamp(2rem, 5vw, 2.75rem);
-	font-weight: 800;
-	line-height: 1.15;
-	letter-spacing: -0.02em;
+	font-family: var(--sg-font-heading);
+	font-size: clamp(2rem, 5vw, 3.25rem);
+	font-weight: 400;
+	line-height: 1.1;
+	letter-spacing: 0.02em;
 	margin-bottom: var(--sg-space-md);
 }
 
@@ -1089,12 +1052,12 @@ body.sg-front-page .inside-article {
 	gap: var(--sg-space-sm) var(--sg-space-md);
 	color: var(--sg-text-secondary);
 	font-size: 0.85rem;
+	font-family: var(--sg-font-body);
 	margin-bottom: 0;
 	padding-bottom: var(--sg-space-lg);
 	border-bottom: 1px solid var(--sg-border);
 }
 
-/* Separators between meta items — GP uses spans inside .entry-meta */
 .single-post .entry-header .entry-meta > span:not(:last-child)::after {
 	content: "·";
 	margin-left: var(--sg-space-md);
@@ -1112,9 +1075,6 @@ body.sg-front-page .inside-article {
 
 /* --------------------------------------------------------------------------
    21. Article — Featured Image
-   --------------------------------------------------------------------------
-   The featured image sits between the header and body content. It spans
-   the full reading width with a subtle border-radius for polish.
    -------------------------------------------------------------------------- */
 
 .single-post .post-image {
@@ -1124,31 +1084,24 @@ body.sg-front-page .inside-article {
 .single-post .post-image img {
 	width: 100%;
 	height: auto;
-	border-radius: 4px;
 	display: block;
 }
 
 
 /* --------------------------------------------------------------------------
    22. Article — Body Content
-   --------------------------------------------------------------------------
-   The .entry-content div holds all post body HTML (paragraphs, headings,
-   lists, images, embeds, Gutenberg blocks). Base typography (sections 2–7)
-   already handles element-level styling. These rules add article-specific
-   spacing refinements within the reading column.
    -------------------------------------------------------------------------- */
 
 .single-post .entry-content {
+	font-family: var(--sg-font-body);
 	font-size: 1.05rem;
 	line-height: 1.8;
 }
 
-/* First element after content starts — remove excess top margin */
 .single-post .entry-content > *:first-child {
 	margin-top: 0;
 }
 
-/* Last element — remove bottom margin to avoid double-spacing before footer */
 .single-post .entry-content > *:last-child {
 	margin-bottom: 0;
 }
@@ -1156,10 +1109,6 @@ body.sg-front-page .inside-article {
 
 /* --------------------------------------------------------------------------
    23. Article — Entry Footer
-   --------------------------------------------------------------------------
-   Tags and categories at the bottom of the article. Styled as a quiet
-   metadata line — not a visual feature. The top border marks the end
-   of the article body.
    -------------------------------------------------------------------------- */
 
 .single-post footer.entry-meta {
@@ -1168,6 +1117,7 @@ body.sg-front-page .inside-article {
 	padding-bottom: 0;
 	border-top: 1px solid var(--sg-border);
 	border-bottom: none;
+	font-family: var(--sg-font-body);
 }
 
 .single-post footer.entry-meta .cat-links,

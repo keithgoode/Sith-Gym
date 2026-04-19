@@ -1,6 +1,9 @@
 <?php
 /**
- * Front page template.
+ * Front page template — Sith Gym marketing homepage.
+ *
+ * Replaces the editorial front-page.php with the full brand identity layout:
+ * hero → code tenets → brand positioning → CTA.
  *
  * @package Sith_Gym
  */
@@ -10,111 +13,153 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 get_header();
-
-$front_page_id = get_queried_object_id();
-
-$page_title   = get_the_title( $front_page_id );
-$page_excerpt = has_excerpt( $front_page_id ) ? get_the_excerpt( $front_page_id ) : '';
-$page_content = get_post_field( 'post_content', $front_page_id );
-$page_content = apply_filters( 'the_content', $page_content );
-
-$hero_classes = 'sg-hero';
-$hero_style   = '';
-
-if ( has_post_thumbnail( $front_page_id ) ) {
-	$hero_classes .= ' sg-hero--has-image';
-	$hero_image    = get_the_post_thumbnail_url( $front_page_id, 'full' );
-	$hero_style    = ' style="background-image: url(' . esc_url( $hero_image ) . ');"';
-}
 ?>
 
 <main id="main" class="site-main sg-front-page" role="main">
 
-	<section class="<?php echo esc_attr( $hero_classes ); ?>"<?php echo $hero_style; ?>>
-		<div class="sg-hero__inner sg-container">
-			<h1 class="sg-hero__title"><?php echo esc_html( $page_title ); ?></h1>
+	<!-- ═══════════════════════════════════════════════
+	     SECTION 1: HERO
+	     Full-viewport opening. Page title + excerpt
+	     pulled from WP admin for easy editing.
+	     ═══════════════════════════════════════════════ -->
+	<section class="sg-hp-hero" aria-label="Hero">
 
-			<?php if ( ! empty( $page_excerpt ) ) : ?>
-				<p class="sg-hero__subtitle"><?php echo esc_html( $page_excerpt ); ?></p>
-			<?php endif; ?>
+		<!-- Watermark logo pulled from WP custom logo -->
+		<?php
+		$logo_id  = get_theme_mod( 'custom_logo' );
+		$logo_url = $logo_id ? wp_get_attachment_image_url( $logo_id, 'full' ) : '';
+		if ( $logo_url ) : ?>
+			<div class="sg-hp-hero__watermark" aria-hidden="true">
+				<img src="<?php echo esc_url( $logo_url ); ?>" alt="">
+			</div>
+		<?php endif; ?>
 
-			<a href="#sg-latest" class="sg-hero__cta">Explore the Work</a>
+		<!-- Scan-line texture overlay -->
+		<div class="sg-hp-hero__texture" aria-hidden="true"></div>
+
+		<div class="sg-hp-hero__inner sg-hp-container">
+			<?php
+			$page_id      = get_queried_object_id();
+			$hero_title   = get_the_title( $page_id );
+			$hero_sub     = has_excerpt( $page_id )
+				? get_the_excerpt( $page_id )
+				: __( 'The path to self-mastery starts here.', 'sith-gym' );
+			?>
+			<h1 class="sg-hp-hero__title">
+				<?php echo wp_kses_post( $hero_title ?: 'DISCIPLINE OVER<br>MOTIVATION' ); ?>
+			</h1>
+			<p class="sg-hp-hero__subtitle">
+				<?php echo esc_html( $hero_sub ); ?>
+			</p>
 		</div>
+
+		<!-- Bottom edge burn -->
+		<div class="sg-hp-hero__fade" aria-hidden="true"></div>
 	</section>
 
-	<?php if ( ! empty( trim( wp_strip_all_tags( $page_content ) ) ) ) : ?>
-	<section class="sg-positioning">
-		<div class="sg-positioning__inner sg-container">
-			<div class="sg-positioning__content entry-content">
-				<?php echo $page_content; ?>
-			</div>
-		</div>
-	</section>
-	<?php endif; ?>
 
-	<?php
-	$latest_posts = new WP_Query(
-		array(
-			'posts_per_page'      => 3,
-			'post_status'         => 'publish',
-			'ignore_sticky_posts' => true,
-			'no_found_rows'       => true,
-		)
-	);
+	<!-- ═══════════════════════════════════════════════
+	     SECTION 2: THE SITH GYM CODE
+	     Seven tenets. Editable via WP custom fields
+	     (falls back to static copy if ACF/meta absent).
+	     ═══════════════════════════════════════════════ -->
+	<section class="sg-hp-code" aria-labelledby="sg-code-heading">
+		<div class="sg-hp-container sg-hp-container--narrow">
 
-	if ( $latest_posts->have_posts() ) :
-	?>
-	<section id="sg-latest" class="sg-latest">
-		<div class="sg-container">
-			<h2 class="sg-section-title">Latest</h2>
-
-			<div class="sg-latest__grid">
-				<?php while ( $latest_posts->have_posts() ) : $latest_posts->the_post(); ?>
-				<article class="sg-post-card">
-					<?php if ( has_post_thumbnail() ) : ?>
-						<a href="<?php the_permalink(); ?>" class="sg-post-card__image" aria-hidden="true" tabindex="-1">
-							<?php the_post_thumbnail( 'medium_large' ); ?>
-						</a>
-					<?php endif; ?>
-
-					<div class="sg-post-card__body">
-						<time class="sg-post-card__date" datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>">
-							<?php echo esc_html( get_the_date() ); ?>
-						</time>
-
-						<h3 class="sg-post-card__title">
-							<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-						</h3>
-
-						<?php
-						$card_excerpt = has_excerpt()
-							? get_the_excerpt()
-							: wp_trim_words( wp_strip_all_tags( get_the_content() ), 20, '&hellip;' );
-						?>
-						<p class="sg-post-card__excerpt"><?php echo esc_html( $card_excerpt ); ?></p>
-					</div>
-				</article>
-				<?php endwhile; ?>
-			</div>
+			<h2 class="sg-hp-code__heading" id="sg-code-heading">
+				THE SITH GYM CODE
+			</h2>
 
 			<?php
-			$blog_page_id = get_option( 'page_for_posts' );
-			if ( $blog_page_id ) :
+			// Pull tenets from post meta (key: sg_code_tenets, JSON array)
+			// Falls back to hardcoded defaults so the page always renders.
+			$tenets_raw = get_post_meta( $page_id, 'sg_code_tenets', true );
+			$tenets     = $tenets_raw ? json_decode( $tenets_raw, true ) : array();
+
+			if ( empty( $tenets ) ) {
+				$tenets = array(
+					'Peace is a lie. There is only friction.',
+					'Through friction, I find focus.',
+					'Through focus, I build strength.',
+					'Through strength, I gain control.',
+					'Through control, I create change.',
+					'Through change, I break limitations.',
+					'Through discipline, I am free.',
+				);
+			}
 			?>
-			<div class="sg-latest__more">
-				<a href="<?php echo esc_url( get_permalink( $blog_page_id ) ); ?>">View All Articles &rarr;</a>
-			</div>
-			<?php endif; ?>
+
+			<ol class="sg-hp-code__list" role="list">
+				<?php foreach ( $tenets as $index => $tenet ) : ?>
+				<li class="sg-hp-code__item" style="--sg-item-index: <?php echo esc_attr( $index ); ?>">
+					<span class="sg-hp-code__tick" aria-hidden="true"></span>
+					<span class="sg-hp-code__text"><?php echo esc_html( $tenet ); ?></span>
+				</li>
+				<?php endforeach; ?>
+			</ol>
+
 		</div>
 	</section>
-	<?php
-		wp_reset_postdata();
-	endif;
-	?>
 
-	<section class="sg-cta">
-		<div class="sg-container">
-			<p class="sg-cta__text">The work starts now.</p>
+
+	<!-- ═══════════════════════════════════════════════
+	     SECTION 3: BRAND POSITIONING
+	     Two-column: image left, statement right.
+	     Image: WP featured image. Copy: page content.
+	     ═══════════════════════════════════════════════ -->
+	<section class="sg-hp-position" aria-label="Brand positioning">
+		<div class="sg-hp-container">
+			<div class="sg-hp-position__grid">
+
+				<!-- Image column -->
+				<div class="sg-hp-position__media">
+					<?php if ( has_post_thumbnail( $page_id ) ) : ?>
+						<?php echo get_the_post_thumbnail( $page_id, 'large', array( 'class' => 'sg-hp-position__img', 'alt' => '' ) ); ?>
+					<?php else : ?>
+						<!-- Placeholder block when no featured image is set -->
+						<div class="sg-hp-position__img-placeholder" aria-hidden="true">
+							<span class="sg-hp-position__img-label">SET FEATURED IMAGE</span>
+						</div>
+					<?php endif; ?>
+					<div class="sg-hp-position__img-overlay" aria-hidden="true"></div>
+				</div>
+
+				<!-- Copy column -->
+				<div class="sg-hp-position__copy">
+					<h2 class="sg-hp-position__heading">
+						Discipline creates control.<br>Control creates freedom.
+					</h2>
+
+					<?php
+					$page_content = get_post_field( 'post_content', $page_id );
+					$page_content = apply_filters( 'the_content', $page_content );
+
+					if ( ! empty( trim( wp_strip_all_tags( $page_content ) ) ) ) :
+						echo $page_content;
+					else : ?>
+						<p>Most people wait to feel ready. They wait for motivation, for the right week, for a better mood, for a version of themselves that does not yet exist.</p>
+						<p>Sith Gym is built on a different idea: that strength is forged through action, not emotion. That transformation begins when excuses lose their authority. That the body can be trained, the mind can be sharpened, and a better life can be built through deliberate effort repeated over time.</p>
+						<p>This is not about performance. It is about command. Over habit. Over weakness. Over drift.</p>
+						<p>The work is not glamorous. It is not easy. It is not instant. It is real.</p>
+					<?php endif; ?>
+				</div>
+
+			</div>
+		</div>
+	</section>
+
+
+	<!-- ═══════════════════════════════════════════════
+	     SECTION 4: CTA
+	     Single action. Placeholder href — swap when
+	     the enlistment form page is ready.
+	     ═══════════════════════════════════════════════ -->
+	<section class="sg-hp-cta" aria-label="Call to action">
+		<div class="sg-hp-container">
+			<h2 class="sg-hp-cta__heading">BEGIN THE WORK.</h2>
+			<a href="#" class="sg-hp-cta__btn" aria-label="Begin training at Sith Gym">
+				THE WORK STARTS NOW
+			</a>
 		</div>
 	</section>
 
