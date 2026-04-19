@@ -10,6 +10,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Enqueue Google Fonts — Bebas Neue (display/headline face).
+ */
+function sith_gym_enqueue_fonts() {
+	wp_enqueue_style(
+		'sith-gym-fonts',
+		'https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap',
+		array(),
+		null
+	);
+}
+add_action( 'wp_enqueue_scripts', 'sith_gym_enqueue_fonts' );
+
+/**
+ * Load Bebas Neue inside the block editor so headings render correctly.
+ */
+function sith_gym_editor_fonts() {
+	add_editor_style( 'https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap' );
+}
+add_action( 'after_setup_theme', 'sith_gym_editor_fonts' );
+
+/**
  * Enqueue the child theme stylesheet.
  *
  * GeneratePress loads its main stylesheet under the handle `generate-style`,
@@ -24,6 +45,24 @@ function sith_gym_enqueue_styles() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'sith_gym_enqueue_styles' );
+
+/**
+ * Enqueue the homepage-specific stylesheet on the front page only.
+ *
+ * Depends on sith-gym-style so GP base → child base → homepage cascade
+ * in the correct order.
+ */
+function sith_gym_enqueue_homepage_styles() {
+	if ( is_front_page() ) {
+		wp_enqueue_style(
+			'sith-gym-homepage',
+			get_stylesheet_directory_uri() . '/sg-homepage.css',
+			array( 'sith-gym-style' ),
+			wp_get_theme()->get( 'Version' )
+		);
+	}
+}
+add_action( 'wp_enqueue_scripts', 'sith_gym_enqueue_homepage_styles' );
 
 /**
  * Register editor styles.
@@ -71,3 +110,15 @@ function sith_gym_front_page_content_classes( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'sith_gym_front_page_content_classes' );
+
+/**
+ * Remove GP's default post-layout padding on the front page so our
+ * full-width sections own the viewport edge-to-edge.
+ */
+function sith_gym_front_page_post_layout( $layout ) {
+	if ( is_front_page() ) {
+		return 'no-paddings';
+	}
+	return $layout;
+}
+add_filter( 'generate_post_layout', 'sith_gym_front_page_post_layout' );

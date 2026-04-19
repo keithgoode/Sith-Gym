@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 ?>
 
-<main id="main" class="site-main sg-front-page" role="main">
+<main id="main" class="site-main" role="main">
 
 	<!-- ═══════════════════════════════════════════════
 	     SECTION 1: HERO
@@ -39,14 +39,13 @@ get_header();
 
 		<div class="sg-hp-hero__inner sg-hp-container">
 			<?php
-			$page_id      = get_queried_object_id();
-			$hero_title   = get_the_title( $page_id );
-			$hero_sub     = has_excerpt( $page_id )
+			$page_id  = get_queried_object_id();
+			$hero_sub = has_excerpt( $page_id )
 				? get_the_excerpt( $page_id )
 				: __( 'The path to self-mastery starts here.', 'sith-gym' );
 			?>
 			<h1 class="sg-hp-hero__title">
-				<?php echo wp_kses_post( $hero_title ?: 'DISCIPLINE OVER<br>MOTIVATION' ); ?>
+				DISCIPLINE OVER<br>MOTIVATION
 			</h1>
 			<p class="sg-hp-hero__subtitle">
 				<?php echo esc_html( $hero_sub ); ?>
