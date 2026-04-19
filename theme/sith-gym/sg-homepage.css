@@ -81,7 +81,7 @@ body.sg-front-page #primary {
 }
 
 body.sg-front-page .site-main {
-	overflow: hidden;
+	overflow-x: hidden;
 }
 
 
