@@ -112,14 +112,12 @@ get_header();
 
 				<!-- Image column -->
 				<div class="sg-hp-position__media">
-					<?php if ( has_post_thumbnail( $page_id ) ) : ?>
-						<?php echo get_the_post_thumbnail( $page_id, 'large', array( 'class' => 'sg-hp-position__img', 'alt' => '' ) ); ?>
-					<?php else : ?>
-						<!-- Placeholder block when no featured image is set -->
-						<div class="sg-hp-position__img-placeholder" aria-hidden="true">
-							<span class="sg-hp-position__img-label">SET FEATURED IMAGE</span>
-						</div>
-					<?php endif; ?>
+					<img
+						src="https://sithgym.com/wp-content/uploads/2026/04/b2cd0700-7796-4c21-b2db-0424fc19dac9-scaled.jpg"
+						class="sg-hp-position__img"
+						alt=""
+						loading="lazy"
+					>
 					<div class="sg-hp-position__img-overlay" aria-hidden="true"></div>
 				</div>
 
